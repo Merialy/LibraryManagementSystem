@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Library.Core/Library.Core.csproj" />
+  <Project Path="Library/Library.csproj" Id="4151b829-ccbe-4934-b3cf-ec576dad16e6" />
 </Solution>
