@@ -10,89 +10,80 @@ namespace Library
     /// </summary>
     public class LibrarySystem : ILibrarySystem
     {
-        private List<IBook> books = new List<IBook>();
-        private List<IReader> readers = new List<IReader>();
+        // Тепер поля readonly - інкапсуляція залежностей
+        private readonly List<IBook> _books;
+        private readonly List<IReader> _readers;
+
+        /// <summary>
+        /// Конструктор з впровадженням залежностей (Constructor Injection)
+        /// </summary>
+        /// <param name="books">Зовнішній список книг (для тестів можна передати фейковий)</param>
+        /// <param name="readers">Зовнішній список читачів</param>
+        public LibrarySystem(List<IBook> books = null, List<IReader> readers = null)
+        {
+            _books = books ?? new List<IBook>();
+            _readers = readers ?? new List<IReader>();
+        }
 
         /// <summary>
         /// Додати нову книгу до бібліотеки
         /// </summary>
-        /// <param name="title">Назва книги</param>
-        /// <param name="author">Автор книги</param>
         public void AddBook(string title, string author)
         {
-            Book book = new Book(title, author);
-            books.Add(book);
+            // Створюємо конкретний екземпляр, але додаємо в впроваджений список
+            IBook book = new Book(title, author);
+            _books.Add(book);
         }
 
         /// <summary>
         /// Видалити книгу з бібліотеки
         /// </summary>
-        /// <param name="book">Книга для видалення</param>
         public void RemoveBook(IBook book)
         {
-            books.Remove(book);
+            _books.Remove(book);
         }
 
         /// <summary>
         /// Знайти книгу за запитом
         /// </summary>
-        /// <param name="query">Пошуковий запит (автор або назва)</param>
-        /// <returns>Список знайдених книг</returns>
         public List<IBook> SearchBook(string query)
         {
-            List<IBook> result = new List<IBook>();
-
             if (string.IsNullOrEmpty(query))
             {
                 throw new ArgumentException("Параметр для пошуку не задано", nameof(query));
             }
 
-            foreach (IBook book in books)
-            {
-                if (book.GetAuthor() == query || book.GetTitle() == query)
-                {
-                    result.Add(book);
-                }
-            }
-
-            return result;
+            // Використовуємо LINQ для пошуку
+            return _books.Where(b => b.GetAuthor().Contains(query) || b.GetTitle().Contains(query)).ToList();
         }
 
         /// <summary>
         /// Перевірити доступність книги
         /// </summary>
-        /// <param name="book">Книга для перевірки</param>
-        /// <returns>True якщо книга доступна</returns>
         public bool CheckAvailability(IBook book)
         {
-            return book.IsAvailable();
+            return book?.IsAvailable() ?? false;
         }
 
         /// <summary>
         /// Додати читача до системи
         /// </summary>
-        /// <param name="reader">Читач для додавання</param>
         public void AddReader(IReader reader)
         {
-            readers.Add(reader);
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+
+            _readers.Add(reader);
         }
 
         /// <summary>
         /// Отримати список всіх книг
         /// </summary>
-        /// <returns>Список книг</returns>
-        public List<IBook> GetBooks()
-        {
-            return books;
-        }
+        public List<IBook> GetBooks() => _books;
 
         /// <summary>
         /// Отримати список всіх читачів
         /// </summary>
-        /// <returns>Список читачів</returns>
-        public List<IReader> GetReaders()
-        {
-            return readers;
-        }
+        public List<IReader> GetReaders() => _readers;
     }
 }
