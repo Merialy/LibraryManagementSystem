@@ -1,0 +1,20 @@
+From d07d75afd63b0376f268feb4e4822694c3015630 Mon Sep 17 00:00:00 2001
+From: "Iliya Komolov (Dev)" <i.o.komolov@student.khai.edu>
+Date: Thu, 29 Jan 2026 21:14:53 +0200
+Subject: [PATCH] Add test file for patch demo
+
+---
+ test_patch.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 test_patch.txt
+
+diff --git a/test_patch.txt b/test_patch.txt
+new file mode 100644
+index 0000000..ff5ae89
+--- /dev/null
++++ b/test_patch.txt
+@@ -0,0 +1 @@
++Test patch content
+-- 
+2.52.0.windows.1
+

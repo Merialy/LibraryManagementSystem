@@ -8,10 +8,10 @@ namespace Library
     /// </summary>
     public class Book : IBook
     {
-        // Приватні поля
         private string title = "Unknown";
         private string author = "Unknown";
         private bool isAvailable = true;
+        // New feature in progress
         private DateTime dateTaken = DateTime.MinValue;
         private DateTime dateBack = DateTime.MinValue;
 
